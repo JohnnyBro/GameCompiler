@@ -78,7 +78,11 @@ namespace GameCompiler.Analizadores
             var CPAREDES = new NonTerminal("CPAREDES");
             var CPARED = new NonTerminal("CPARED");
             var EXTRAS=new NonTerminal("EXTRAS");
+            var CEXTRAS = new NonTerminal("CEXTRAS");
+            var CEXTRA = new NonTerminal("CEXTRA");
             var META=new NonTerminal("META");
+            var CMETAS = new NonTerminal("CMETAS");
+            var CMETA = new NonTerminal("CMETA");
             var HEROES = new NonTerminal("HEROES");
             var CHEROES=new NonTerminal("CHEROES");
             var CHEROE=new NonTerminal("CHEROE");
@@ -87,6 +91,12 @@ namespace GameCompiler.Analizadores
             var CVILLANO=new NonTerminal("CVILLANO");
             var POSICIONES = new NonTerminal("POSICIONES");
             var POSICION = new NonTerminal("POSICION");
+            var ARMAS = new NonTerminal("ARMAS");
+            var CARMAS = new NonTerminal("CARMAS");
+            var CARMA = new NonTerminal("CARMA");
+            var BONUS = new NonTerminal("BONUS");
+            var CBONUS = new NonTerminal("CBONUS");
+            var CBONU = new NonTerminal("CBONU");
 
 
             var EXP = new NonTerminal("EXP");
@@ -102,8 +112,8 @@ namespace GameCompiler.Analizadores
 
             CUERPO.Rule= PERSONAJES
                               | PAREDES
-                              //| EXTRAS
-                              //| META
+                              | EXTRAS
+                              | META
                               ;
 
             PERSONAJES.Rule = tokMenor + tokPersonajes + tokMayor + CPERSONAJES + tokMenor + tokSlash + tokPersonajes + tokMayor
@@ -148,6 +158,43 @@ namespace GameCompiler.Analizadores
 
             POSICION.Rule = EXP
                               | EXP + tokPunto + tokPunto + EXP
+                              ;
+
+            EXTRAS.Rule = tokMenor + tokExtras + tokMayor + CEXTRAS + tokMenor + tokSlash + tokExtras + tokMayor
+                              ;
+
+            CEXTRAS.Rule = MakePlusRule(CEXTRAS, CEXTRA)
+                              ;
+
+            CEXTRA.Rule = ARMAS
+                              | BONUS
+                              ;
+
+            ARMAS.Rule = tokMenor + tokArmas + tokMayor + CARMAS + tokMenor + tokSlash + tokArmas + tokMayor
+                              ;
+
+            CARMAS.Rule = MakePlusRule(CARMAS, CARMA)
+                              ;
+
+            CARMA.Rule = tokId + tokApar + EXP + tokComa + EXP + tokCpar + tokPcoma
+                              ;
+
+            BONUS.Rule = tokMenor + tokBonus + tokMayor + CBONUS + tokMenor + tokSlash + tokBonus + tokMayor
+                              ;
+
+            CBONUS.Rule = MakePlusRule(CBONUS, CBONU)
+                              ;
+
+            CBONU.Rule = tokId + tokApar + EXP + tokComa + EXP + tokCpar + tokPcoma
+                              ;
+
+            META.Rule = tokMenor + tokMeta + tokMayor + CMETAS + tokMenor + tokSlash + tokMeta + tokMayor
+                              ;
+
+            CMETAS.Rule = MakePlusRule(CMETAS, CMETA)
+                              ;
+
+            CMETA.Rule = tokId + tokApar + EXP + tokComa + EXP + tokCpar + tokPcoma
                               ;
 
             EXP.Rule = EXP + tokMas + EXP
