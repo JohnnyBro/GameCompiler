@@ -115,6 +115,7 @@ namespace GameCompiler.Analizadores
                               | EXTRAS
                               | META
                               ;
+            CUERPO.ErrorRule = SyntaxError + ">";
 
             PERSONAJES.Rule = tokMenor + tokPersonajes + tokMayor + CPERSONAJES + tokMenor + tokSlash + tokPersonajes + tokMayor
                               ;
@@ -134,6 +135,7 @@ namespace GameCompiler.Analizadores
 
             CHEROE.Rule=tokId+tokApar+EXP+tokComa+EXP+tokCpar+tokPcoma
                               ;
+            CHEROE.ErrorRule = SyntaxError + ";";
 
             VILLANOS.Rule=tokMenor+tokVillanos+tokMayor+CVILLANOS+tokMenor+tokSlash+tokVillanos+tokMayor
                               ;
@@ -143,6 +145,7 @@ namespace GameCompiler.Analizadores
 
             CVILLANO.Rule=tokId+tokApar+EXP+tokComa+EXP+tokCpar+tokPcoma
                               ;
+            CVILLANO.ErrorRule = SyntaxError + ";";
 
             PAREDES.Rule = tokMenor + tokParedes + tokMayor + CPAREDES + tokMenor + tokSlash + tokParedes + tokMayor
                               ;
@@ -152,6 +155,7 @@ namespace GameCompiler.Analizadores
 
             CPARED.Rule = tokId + tokApar + POSICIONES + tokCpar + tokPcoma
                               ;
+            CPARED.ErrorRule = SyntaxError + ";";
 
             POSICIONES.Rule = POSICION + tokComa + POSICION
                               ;
@@ -178,6 +182,7 @@ namespace GameCompiler.Analizadores
 
             CARMA.Rule = tokId + tokApar + EXP + tokComa + EXP + tokCpar + tokPcoma
                               ;
+            CARMA.ErrorRule = SyntaxError + ";";
 
             BONUS.Rule = tokMenor + tokBonus + tokMayor + CBONUS + tokMenor + tokSlash + tokBonus + tokMayor
                               ;
@@ -187,6 +192,7 @@ namespace GameCompiler.Analizadores
 
             CBONU.Rule = tokId + tokApar + EXP + tokComa + EXP + tokCpar + tokPcoma
                               ;
+            CBONU.ErrorRule = SyntaxError + ";";
 
             META.Rule = tokMenor + tokMeta + tokMayor + CMETAS + tokMenor + tokSlash + tokMeta + tokMayor
                               ;
@@ -196,6 +202,7 @@ namespace GameCompiler.Analizadores
 
             CMETA.Rule = tokId + tokApar + EXP + tokComa + EXP + tokCpar + tokPcoma
                               ;
+            CMETA.ErrorRule = SyntaxError + ";";
 
             EXP.Rule = EXP + tokMas + EXP
                             | EXP + tokMenos + EXP

@@ -119,6 +119,8 @@ namespace GameCompiler
         {
             if (tabPestanas.SelectedTab.Text != "")
             {
+                //Se limpia la lista de errores cada vez que se compila para que no muestre errores anteriores despues de su correcion.
+                LErrores.Clear();
                 //Ejecucion.Ejecutor ejecutor=new Ejecucion.Ejecutor();
                 string entrada = LP.leerEntrada(tabPestanas.SelectedTab.Text);
                 //MessageBox.Show(entrada);

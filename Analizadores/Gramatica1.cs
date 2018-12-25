@@ -154,7 +154,8 @@ namespace GameCompiler.Analizadores
                             | LABELFIGURE
                             | LABELDESIGN
                             ;
-
+            BODY.ErrorRule = SyntaxError + ">";
+            
             LABELBACKGROUND.Rule = tokMenor + tokBackground + tokMayor + BACKGROUNDS + tokMenor + tokSlash + tokBackground + tokMayor
                             ;
 
@@ -169,6 +170,7 @@ namespace GameCompiler.Analizadores
 
             BACKGROUND.Rule = tokAllave + BODIESBACKGROUND + tokCllave
                             ;
+            BACKGROUND.ErrorRule = SyntaxError + "}";
 
             BODIESBACKGROUND.Rule = MakeStarRule(BODIESBACKGROUND, BODYBACKGROUND)
                             ;
@@ -179,18 +181,23 @@ namespace GameCompiler.Analizadores
 
             NAME.Rule = tokNombre + tokIgual + tokId + tokPcoma
                             ;
+            NAME.ErrorRule = SyntaxError + ";";
 
             SOURCE.Rule = tokImagen + tokIgual + tokCadena + tokPcoma
                             ;
+            SOURCE.ErrorRule = SyntaxError + ";";
 
             DESCRIPTION.Rule = tokDescripcion + tokIgual + tokCadena + tokPcoma
                             ;
+            DESCRIPTION.ErrorRule = SyntaxError + ";";
 
             LIFE.Rule = tokVida + tokIgual + EXP + tokPcoma
                             ;
+            LIFE.ErrorRule = SyntaxError + ";";
 
             DESTRUCTION.Rule = tokDestruir + tokIgual + EXP + tokPcoma
                            ;
+            DESTRUCTION.ErrorRule = SyntaxError + ";";
 
 
             FIGURES.Rule = MakePlusRule(FIGURES, tokComa, FIGURE)
@@ -198,6 +205,7 @@ namespace GameCompiler.Analizadores
 
             FIGURE.Rule = tokAllave + FIGUREBODIES + tokCllave
                             ;
+            FIGURE.ErrorRule = SyntaxError + "}";
 
             FIGUREBODIES.Rule = MakePlusRule(FIGUREBODIES, FIGUREBODY)
                             ;
@@ -212,6 +220,7 @@ namespace GameCompiler.Analizadores
 
             FIGURETYPE.Rule = tokTipo + tokIgual + FTYPE + tokPcoma
                             ;
+            FIGURETYPE.ErrorRule = SyntaxError + ";";
 
             FTYPE.Rule = tokHero
                         | tokEnemy
@@ -231,6 +240,7 @@ namespace GameCompiler.Analizadores
 
             DESIGN.Rule = tokAllave + DESIGNBODIES + tokCllave
                             ;
+            DESIGN.ErrorRule = SyntaxError + "}";
 
             DESIGNBODIES.Rule = MakePlusRule(DESIGNBODIES, DESIGNBODY)
                             ;
@@ -244,9 +254,11 @@ namespace GameCompiler.Analizadores
 
             POINTS.Rule = tokCreditos + tokIgual + EXP + tokPcoma
                             ;
+            POINTS.ErrorRule = SyntaxError + ";";
 
             DESIGNTYPE.Rule = tokTipo + tokIgual + DTYPE + tokPcoma
                             ;
+            DESIGNTYPE.ErrorRule = SyntaxError + ";";
 
             DTYPE.Rule = tokMeta
                             | tokBloque

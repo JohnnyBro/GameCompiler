@@ -90,9 +90,10 @@ namespace GameCompiler.Analizadores
                 return true;
             }
         }
-
         private static void recorrer(ParseTreeNode raiz)
         {
+
+
             switch (raiz.Term.Name)
             {
                 case "START":
