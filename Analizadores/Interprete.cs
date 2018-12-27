@@ -17,9 +17,9 @@ namespace GameCompiler.Analizadores
      
     public class Interprete: Grammar
     {
-        private static LinkedList<Background> lista_background = new LinkedList<Background>();
-        private static LinkedList<Figure> lista_figure = new LinkedList<Figure>();
-        private static LinkedList<Design> lista_design = new LinkedList<Design>();
+        //private static LinkedList<Background> lista_background = new LinkedList<Background>();
+        //private static LinkedList<Figure> lista_figure = new LinkedList<Figure>();
+        //private static LinkedList<Design> lista_design = new LinkedList<Design>();
 
         public static bool analizar1(String entrada)
         {
@@ -108,7 +108,15 @@ namespace GameCompiler.Analizadores
                         recorrer(item);
                     break;
                 case "BODIESBACKGROUND":
-                    obtener_datos_backgroud(raiz);
+                    if(raiz.ChildNodes.Count==2)
+                    {
+                        obtener_datos_backgroud(raiz);
+                    }
+                    else
+                    {
+                        Analizadores.Error error = new Error("Sintactico", "Syntax error, expected: x-nombre, x-imagen", raiz.Span.Location.Line, raiz.Span.Location.Column);
+                        Form1.LErrores.Add(error);
+                    }
                     break;
                 case "FIGURES":
                     foreach (var item in raiz.ChildNodes)
@@ -136,31 +144,122 @@ namespace GameCompiler.Analizadores
             String tipo = "";
             double danio = 0;
             double puntos = 0;
+            Analizadores.Error error;
+
             foreach(var item in raiz.ChildNodes)
             {
                 switch (item.Term.Name)
                 {
 
                     case "NAME":
-                        nombre = item.ChildNodes[2].Token.Text;
+                        try
+                        {
+                            nombre = item.ChildNodes[2].Token.Text;
+                        }
+                        catch (Exception)
+                        {
+                            return;
+                        }
                         break;
                     case "SOURCE":
-                        ruta = item.ChildNodes[2].Token.Text;
+                        try
+                        {
+                            ruta = item.ChildNodes[2].Token.Text;
+                        }
+                        catch (Exception)
+                        {
+                            return;
+                        }
                         break;
                     case "DESTRUCTION":
-                        danio = evaluar_expresion(item.ChildNodes[2]);
+                        try
+                        {
+                            danio = evaluar_expresion(item.ChildNodes[2]);
+                        }
+                        catch (Exception)
+                        {
+                            return;
+                        }
                         break;
                     case "DESIGNTYPE":
-                        tipo = item.ChildNodes[2].Token.Text;
+                        try
+                        {
+                            tipo = item.ChildNodes[2].Token.Text;
+                        }
+                        catch (Exception)
+                        {
+                            return;
+                        }
                         break;
                     case "POINTS":
-                        puntos = evaluar_expresion(item.ChildNodes[2]);
+                        try
+                        {
+                            puntos = evaluar_expresion(item.ChildNodes[2]);
+                            if (puntos < 0)
+                            {
+                                error = new Error("Semantico", "Semantic error, NO se acepta un valor final negativo ", item.Span.Location.Line, item.Span.Location.Column);
+                                Form1.LErrores.Add(error);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            return;
+                        }
                         break;
+                    default:
+                        error = new Error("Sintactico", "Syntax error, expected: x-nombre, x-imagen, x-tipo, x-destruir, x-creditos", item.Span.Location.Line, item.Span.Location.Column);
+                        Form1.LErrores.Add(error);
+                        break;
+                }
+            }
+            if (nombre == "" || ruta == "" || tipo == "")
+            {
+                error = new Error("Sintactico", "Syntax error, expected: x-nombre, x-imagen, x-tipo ", raiz.Span.Location.Line, raiz.Span.Location.Column);
+                Form1.LErrores.Add(error);
+                return;
+            }
+
+            if(tipo=="x-bonus")
+            {
+                if(puntos==0)
+                {
+                    error = new Error("Sintactico", "Syntax error, expected: x-creditos dentro de " + tipo, raiz.Span.Location.Line, raiz.Span.Location.Column);
+                    Form1.LErrores.Add(error);
+                    return;
+                }
+                if(danio!=0)
+                {
+                    error = new Error("Semantico", "Semantic error, no se puede declarar x-destruir dentro de " + tipo, raiz.Span.Location.Line, raiz.Span.Location.Column);
+                    Form1.LErrores.Add(error);
+                    return;
+                }
+            }else if(tipo=="x-bomba" || tipo=="x-arma")
+            {
+                if(danio==0)
+                {
+                    error = new Error("Sintactico", "Syntax error, expected: x-destruir dentro de" + tipo, raiz.Span.Location.Line, raiz.Span.Location.Column);
+                    Form1.LErrores.Add(error);
+                    return;
+                }
+                if(puntos!=0)
+                {
+                    error = new Error("Semantico", "Semantic error, no se puede declarar x-creditos dentro de " + tipo, raiz.Span.Location.Line, raiz.Span.Location.Column);
+                    Form1.LErrores.Add(error);
+                    return;
+                }
+            }else if(tipo=="x-bloque" || tipo=="x-meta")
+            {
+                if(danio!=0 || puntos!=0)
+                {
+                    error = new Error("Semantico", "Semantic error, no se puede declarar x-creditos, x-destruir dentro de " + tipo, raiz.Span.Location.Line, raiz.Span.Location.Column);
+                    Form1.LErrores.Add(error);
+                    return;
                 }
             }
 
             Design diseno = new Design(nombre, ruta, tipo, danio, puntos);
-            lista_design.AddLast(diseno);
+            Form1.lista_design.AddLast(diseno);
+            
 
 
         }
@@ -169,44 +268,153 @@ namespace GameCompiler.Analizadores
         {
             String nombre = "";
             String ruta = "";
-            double vida = 0;
+            double vida = 100;
             double danio = 0;
             String tipo = "";
             String descripcion = "";
+            Analizadores.Error error;
+            int linea=0;
+            int columna = 0;
+
             foreach(var item in raiz.ChildNodes)
             {
+
                 switch(item.Term.Name)
                 {
                     case "NAME":
-                        nombre=item.ChildNodes[2].Token.Text;
+                        try
+                        {
+                            nombre = item.ChildNodes[2].Token.Text;
+                        }
+                        catch (Exception)
+                        {
+                            
+                            return;
+                        }
+                        
                         break;
                     case "SOURCE":
-                        ruta = item.ChildNodes[2].Token.Text;
+                        try
+                        {
+                            ruta = item.ChildNodes[2].Token.Text;
+                        }
+                        catch (Exception)
+                        {
+                            
+                            return;
+                        }   
                         break;
                     case "LIFE":
-                        //VALIDAR EXP
-                       vida = evaluar_expresion(item.ChildNodes[2]);
+                        try
+                        {
+                            //VALIDAR EXP
+                            vida = evaluar_expresion(item.ChildNodes[2]);
+                            if(vida<0)
+                            {
+                                error = new Error("Semantico", "Semantic error, NO se acepta un valor final negativo ", item.Span.Location.Line, item.Span.Location.Column);
+                                Form1.LErrores.Add(error);
+                                return;
+                            }
+                        }
+                        catch (Exception)
+                        {
 
+                            return;
+                        }
                         break;
                     case "FIGURETYPE":
-                        tipo = item.ChildNodes[2].Token.Text;
+                        try
+                        {
+                            tipo = item.ChildNodes[2].Token.Text;
+                        }
+                        catch (Exception)
+                        {
+
+                            return;
+                        }
                         break;
                     case "DESCRIPTION":
-                        descripcion = item.ChildNodes[2].Token.Text;
+                        try
+                        {
+                            descripcion = item.ChildNodes[2].Token.Text;
+                        }
+                        catch (Exception)
+                        {
+
+                            return;
+                        }
                         break;
                     case "DESTRUCTION":
-                        danio = evaluar_expresion(item.ChildNodes[2]);
+                        try
+                        {
+                            linea = item.Span.Location.Line;
+                            columna = item.Span.Location.Column;
+                            danio = evaluar_expresion(item.ChildNodes[2]);
+                            if (danio < 0)
+                            {
+                                error = new Error("Semantico", "Semantic error, NO se acepta un valor final negativo ", item.Span.Location.Line, item.Span.Location.Column);
+                                Form1.LErrores.Add(error);
+                                return;
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            return;
+                        }
+                        break;
+                    default:
+                        error = new Error("Sintactico", "Syntax error, expected: x-nombre, x-imagen, x-tipo,", item.Span.Location.Line, item.Span.Location.Column);
+                        Form1.LErrores.Add(error);
                         break;
                 }
             }
 
+            if(tipo=="x-heroe")
+            {
+                if (danio != 0)
+                {
+                    error = new Error("Semantico", "Semantic error, no se puede declarar x-destruir dentro de un heroe.", linea, columna);
+                    Form1.LErrores.Add(error);
+                    return;
+                }
+                if(descripcion=="")
+                {
+                    descripcion = "Es el Heroe de la historia, tiene el poder derrotar a sus enemigos..";
+                }
+               
+                
+                
+            }else if(tipo=="x-enemigo")
+            {
+                if(danio==0)
+                {
+                    error = new Error("Sintactico", "Sintax error, expected: x-destruir dentro de un enemigo", raiz.Span.Location.Line, raiz.Span.Location.Column);
+                    Form1.LErrores.Add(error);
+                    return;
+                }
+
+                if(descripcion=="")
+                {
+                    descripcion = "Hara todo lo posible para destruirte, ten mucho cuidado si lo encuentras..";
+                }
+                
+            }
+            if(nombre==""||ruta==""||tipo=="")
+            {
+                error = new Error("Sintactico", "Syntax error, expected: x-nombre, x-imagen, x-tipo ", raiz.Span.Location.Line, raiz.Span.Location.Column);
+                Form1.LErrores.Add(error);
+                return;
+            }
+
             Figure figura = new Figure(nombre,ruta, vida, tipo, descripcion);
-            lista_figure.AddLast(figura);
+            Form1.lista_figure.AddLast(figura);
 
         }
 
         private static double evaluar_expresion(ParseTreeNode raiz)
         {
+            Analizadores.Error error;
                 switch (raiz.ChildNodes.Count)
             {
                 case 3:
@@ -215,72 +423,34 @@ namespace GameCompiler.Analizadores
                         case "+":
                             double val1 = evaluar_expresion(raiz.ChildNodes[0]);
                             double val2 = evaluar_expresion(raiz.ChildNodes[2]);
-                           
-                            if (val1 == -200517803 || val2 == -200517803)
-                            {
-                                return -200517803;
-                            }
-                            else
-                            {
-                                return val1 + val2;
-                            }
-
-
+                            return val1 + val2;
+                            
                         case"-":
                             double resta1 = evaluar_expresion(raiz.ChildNodes[0]);
                             double resta2 = evaluar_expresion(raiz.ChildNodes[2]);
-                            if(resta1==-200517803 || resta2==-200517803)
-                            {
-                                return -200517803;
-                            }
-                            else
-                            {
-                                return resta1 - resta2;
-                            }
-                            
+                            return resta1 - resta2;
                         case "/":
                             double div1 = evaluar_expresion(raiz.ChildNodes[0]);
                             double div2 = evaluar_expresion(raiz.ChildNodes[2]);
                             if(div2==0)
                             {
-                                int linea = raiz.ChildNodes[2].Span.Location.Line;
-                                int columna = raiz.ChildNodes[2].Span.Location.Column;
-                                Error error = new Error("Semantico", "No se puede dividir por 0", linea, columna);
+                                error = new Error("Semantico", "Semantic error: No se puede dividirentre cero", raiz.Span.Location.Line, raiz.Span.Location.Column);
                                 Form1.LErrores.Add(error);
-                                return -200517803;
+                                return 0;
                             }
                             else
                             {
-                                return div1 / div2;
-                            }
-                            
+                                return (div1/div2);
+                            }           
                         case "*":
                             double multi1 = evaluar_expresion(raiz.ChildNodes[0]);
                             double multi2 = evaluar_expresion(raiz.ChildNodes[2]);
-                            if (multi1 == -200517803 || multi2 == -200517803)
-                            {
-                                return -200517803;
-                            }
-                            else
-                            {
-                                return multi1 * multi2;
-                            }
-
-                            
-
-                            
-
+                            return multi1 * multi2;
                     }
                     break;
                 case 2:
-                    if (evaluar_expresion(raiz.ChildNodes[0]) == -200517803)
-                    {
-                        return -2005178003;
-                    }else
-                    {
-                        return evaluar_expresion(raiz.ChildNodes[1]) * - 1;
-                    }
-                    
+                    return evaluar_expresion(raiz.ChildNodes[1]) * -1;
+
                 case 1:
                     switch (raiz.Term.Name)
                     {
@@ -291,7 +461,7 @@ namespace GameCompiler.Analizadores
                     }
                     break;
                    
-                    case 0:
+                case 0:
                     switch (raiz.Term.Name)
                     {
                         case "EXP":
@@ -309,52 +479,73 @@ namespace GameCompiler.Analizadores
         {
             String nombre="";
             string ruta = "";
-
+            Analizadores.Error error;
+            
             foreach (var item in raiz.ChildNodes)
             {
                 switch (item.Term.Name)
                 {
                     case "NAME":
-                        nombre = item.ChildNodes[2].Token.Text;
+                        try
+                        {
+                            nombre = item.ChildNodes[2].Token.Text;
+                        }
+                        catch (Exception)
+                        {
+                            return;
+                        }
+                        
                         break;
                     case "SOURCE":
-                        ruta = item.ChildNodes[2].Token.Text;
+                        try
+                        {
+                            ruta = item.ChildNodes[2].Token.Text;
+                        }
+                        catch (Exception)
+                        {
+                            return;
+                        }
                         break;
                     default:
+                        error = new Error("Sintactico", "Syntax error, expected: x-nombre, x-imagen", item.Span.Location.Line, item.Span.Location.Column);
+                        Form1.LErrores.Add(error);
                         break;
-                        //AGREGAR ERROR
-
                 }
 
             }
 
             Background back = new Background(nombre, ruta);
-            lista_background.AddLast(back);
+            Form1.lista_background.AddLast(back);
         }
 
         public void RecorrerListas()
         {
-            LinkedListNode<Background> back = lista_background.First;
-            LinkedListNode<Figure> figure = lista_figure.First;
-            LinkedListNode<Design> design = lista_design.First;
+            LinkedListNode<Background> back = Form1.lista_background.First;
+            LinkedListNode<Figure> figure = Form1.lista_figure.First;
+            LinkedListNode<Design> design = Form1.lista_design.First;
             Console.WriteLine("***BACKGROUND***");
-            while(back!=null)
+            while (back != null)
             {
-                Console.WriteLine("Nombre: "+ back.Value.nombre);
+                Console.WriteLine("\nNombre: " + back.Value.nombre);
                 Console.WriteLine("Ruta: " + back.Value.ruta);
-
+                Console.WriteLine("Ancho: " + back.Value.ancho);
+                Console.WriteLine("Alto: " + back.Value.alto);
+                Console.WriteLine("Utilizado: " + back.Value.seleccionado);
                 back = back.Next;
             }
 
             Console.WriteLine(" ");
             Console.WriteLine("**FIGURE**");
-            while(figure!=null)
+            while (figure != null)
             {
-                Console.WriteLine("Nombre: "+figure.Value.nombre);
-                Console.WriteLine("Ruta: "+figure.Value.ruta);
-                Console.WriteLine("Vida: "+figure.Value.vida);
-                Console.WriteLine("Tipo: "+figure.Value.tipo);
-                Console.WriteLine("Descripcion: "+figure.Value.descripcion);
+                Console.WriteLine("\nNombre: " + figure.Value.nombre);
+                Console.WriteLine("Ruta: " + figure.Value.ruta);
+                Console.WriteLine("Vida: " + figure.Value.vida);
+                Console.WriteLine("Tipo: " + figure.Value.tipo);
+                Console.WriteLine("Descripcion: " + figure.Value.descripcion);
+                Console.WriteLine("X: "+figure.Value.x);
+                Console.WriteLine("Y: " + figure.Value.y);
+                
 
                 figure = figure.Next;
             }
@@ -362,13 +553,19 @@ namespace GameCompiler.Analizadores
             Console.WriteLine(" ");
             Console.WriteLine("**DESIGN**");
 
-            while(design!=null)
+            while (design != null)
             {
-                Console.WriteLine("Nombre: " + design.Value.nombre);
+                Console.WriteLine("\nNombre: " + design.Value.nombre);
                 Console.WriteLine("Ruta: " + design.Value.ruta);
                 Console.WriteLine("Tipo: " + design.Value.tipo);
                 Console.WriteLine("Danio: " + design.Value.danio);
                 Console.WriteLine("Puntos: " + design.Value.puntos);
+
+                Console.WriteLine("Xinicial: " + design.Value.xini);
+                Console.WriteLine("Xfinal: " + design.Value.xfin);
+                Console.WriteLine("Yinicial: " + design.Value.yini);
+                Console.WriteLine("Yfinal: " + design.Value.yfin);
+             
 
                 design = design.Next;
             }

@@ -12,17 +12,28 @@ using Microsoft.VisualBasic;
 using System.Diagnostics;
 using GameCompiler.Analizadores;
 using GameCompiler.Graficadores;
+using GameCompiler.Datos;
 
 namespace GameCompiler
 {
     public partial class Form1 : Form
     {
         int nuevo = 0;
+        String ruta = "";
+        int tamLista;
+        int contador = 0;
+        Figure aux;
         public static List<Error> LErrores = new List<Error>();
+        public static LinkedList<Background> lista_background = new LinkedList<Background>();
+        public static LinkedList<Figure> lista_figure = new LinkedList<Figure>();
+        public static LinkedList<Design> lista_design = new LinkedList<Design>();
         static ListaPestanas LP = new ListaPestanas();
         public Form1()
         {
             InitializeComponent();
+            //mostrarImagenes("inicio");
+            lblNombre.Visible = false;
+
 
         }
 
@@ -119,27 +130,37 @@ namespace GameCompiler
         {
             if (tabPestanas.SelectedTab.Text != "")
             {
-                //Se limpia la lista de errores cada vez que se compila para que no muestre errores anteriores despues de su correcion.
+                //Se limpiaN laS listas cada vez que se compila para que no muestre errores ni datos anteriores a su correcion.
                 LErrores.Clear();
+                lista_design.Clear();
+                lista_figure.Clear();
+                lista_background.Clear();
+                txtConsola.Text = "";
                 //Ejecucion.Ejecutor ejecutor=new Ejecucion.Ejecutor();
                 string entrada = LP.leerEntrada(tabPestanas.SelectedTab.Text);
-                //MessageBox.Show(entrada);
                 bool resultado = Analizadores.Interprete.analizar1(LP.leerEntrada(tabPestanas.SelectedTab.Text));
                 // txtConsola.Text = ejecutor.MostrarSalida();
                 //bool resultado2 = Analizadores.Interprete.analizar2(LP.leerEntrada(pestanas1.SelectedTab.Text), pestanas1.SelectedTab.Name);    
 
-                if (resultado == true)
+                if (resultado == true && LErrores.Count==0)
                 {
 
-                    MessageBox.Show("ANALISIS 1 COMPLETADO");
+                    MessageBox.Show("ANALISIS  COMPLETADO");
                     Analizadores.Interprete inter = new Interprete();
                     inter.RecorrerListas();
+                    aux = lista_figure.First();
+                    tamLista = lista_figure.Count;
+                    mostrarImagenes("inicio");
                 
                 }
                 else
                 {
 
                     MessageBox.Show("EXISTEN ERRORES LEXICOS O SINTACTICOS");
+                    foreach(var item in LErrores)
+                    {
+                        txtConsola.Text = txtConsola.Text + "*" + item.tipo + "  " + item.mensaje + "  Linea: " + item.linea + "  Columna: " + item.columna+"\n"; 
+                    }
                 }
 
                 /*if (resultado2 == true)
@@ -198,12 +219,17 @@ namespace GameCompiler
         {
             Juego.Panel juego = new Juego.Panel();
             juego.Show();
+            //juego.pintar pintar = new juego.pintar();
+            //pintar.pintartablero();
         }
 
         private void itemEjecutarEsc_Click(object sender, EventArgs e)
         {
             if (tabPestanas.SelectedTab.Text != "")
             {
+                //Se limpiaN las listas cada vez que se compila para que no muestre errores ni datos anteriores a su correcion.
+                LErrores.Clear();
+                txtConsola.Text = "";
                 //Ejecucion.Ejecutor ejecutor=new Ejecucion.Ejecutor();
                 string entrada = LP.leerEntrada(tabPestanas.SelectedTab.Text);
                 //MessageBox.Show(entrada);
@@ -214,15 +240,19 @@ namespace GameCompiler
                 if (resultado == true)
                 {
 
-                    MessageBox.Show("ANALISIS 1 COMPLETADO");
+                    MessageBox.Show("ANALISIS  COMPLETADO");
                     Analizadores.Interprete inter = new Interprete();
                     inter.RecorrerListas();
-
+                    
                 }
                 else
                 {
 
                     MessageBox.Show("EXISTEN ERRORES LEXICOS O SINTACTICOS");
+                    foreach (var item in LErrores)
+                    {
+                        txtConsola.Text = txtConsola.Text + "*" + item.tipo + "  " + item.mensaje + "  Linea: " + item.linea + "  Columna: " + item.columna + "\n";
+                    }
                 }
 
                 /*if (resultado2 == true)
@@ -248,6 +278,86 @@ namespace GameCompiler
             }
 
         }
+
+        public   void mostrarImagenes(string accion)
+        {
+            lblNombre.Visible = true;
+            switch(accion)
+            {
+                    
+                case "inicio":
+                    if (tamLista > contador)
+                    {
+                        ruta = lista_figure.ElementAt(contador).ruta;
+                        ruta = ruta.Replace("\"", " ");
+                        Bitmap img = (Bitmap)Bitmap.FromFile(ruta);
+                        img.MakeTransparent();
+                        pictureBox1.Image = img; //Image.FromFile(ruta);
+                        lblNombre.Text = lista_figure.ElementAt(contador).nombre;
+                        string des = "";
+                        des = lista_figure.ElementAt(contador).descripcion;
+                        des = des.Replace("\"", " ");
+                        txtDescripcion.Text = des;
+                    }
+                    break;
+                case "siguiente":
+                    contador++;
+                    if (contador<tamLista)
+                    {
+                        ruta = lista_figure.ElementAt(contador).ruta;
+                        ruta = ruta.Replace("\"", " ");
+                        //ruta.ToString().Replace('"',' ');
+                        pictureBox1.Image = Image.FromFile(ruta);
+                        lblNombre.Text = lista_figure.ElementAt(contador).nombre;
+                        string des = "";
+                        des = lista_figure.ElementAt(contador).descripcion;
+                        des = des.Replace("\"", " ");
+                        txtDescripcion.Text = des;
+                    }
+                    else
+                    {
+                        contador--;
+                    }
+                    break;
+                case "anterior":
+                    contador--;
+                    if (contador>=0)
+                    {
+                        ruta = lista_figure.ElementAt(contador).ruta;
+                        ruta = ruta.Replace("\"", " ");
+                        //ruta.ToString().Replace('"',' ');
+                        pictureBox1.Image = Image.FromFile(ruta);
+                        lblNombre.Text = lista_figure.ElementAt(contador).nombre;
+                        string des = "";
+                        des = lista_figure.ElementAt(contador).descripcion;
+                        des = des.Replace("\"", " ");
+                        txtDescripcion.Text = des;
+                    }
+                    else
+                    {
+                        contador++;
+                    }
+                    break;
+                default:
+                    MessageBox.Show("ERROR DEL SISTEMA");
+                    break;
+            }
+
+            
+
+            
+        }
+
+        private void btnSiguiente_Click(object sender, EventArgs e)
+        {
+            mostrarImagenes("siguiente");
+        }
+
+        private void btnAnterior_Click(object sender, EventArgs e)
+        {
+            mostrarImagenes("anterior");
+        }
+            
 
 
 

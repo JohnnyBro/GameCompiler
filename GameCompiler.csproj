@@ -84,6 +84,7 @@
     <Compile Include="Juego\Panel.Designer.cs">
       <DependentUpon>Panel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Juego\Pintar.cs" />
     <Compile Include="ListaPestanas.cs" />
     <Compile Include="Pestania.cs">
       <SubType>Component</SubType>

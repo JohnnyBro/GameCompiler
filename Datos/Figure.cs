@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace GameCompiler.Datos
 {
-    class Figure
+    public class Figure
     {
         public String nombre;
         public String ruta;
         public Double vida;
         public String tipo;
         public String descripcion;
+        public double x;
+        public double y;
 
         public Figure(String name, String source, Double life, String type, String description)
         {
@@ -22,5 +24,13 @@ namespace GameCompiler.Datos
             this.tipo = type;
             this.descripcion = description;
         }
+
+        public void  agregar_posiciones(double posx, double posy)
+        {
+            this.x = posx;
+            this.y = posy;
+        }
+
+       
     }
 }

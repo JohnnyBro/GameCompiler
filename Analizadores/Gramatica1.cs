@@ -66,9 +66,7 @@ namespace GameCompiler.Analizadores
             var tokMeta = ToTerm("x-meta");
             var tokBloque = ToTerm("x-bloque");
             var tokBonus = ToTerm("x-bonus");
-            var tokMenor = ToTerm("<");
-            var tokMayor = ToTerm(">");
-            var tokSlash = ToTerm("/");
+            var tokDiv = ToTerm("/");
             var tokAllave = ToTerm("{");
             var tokCllave = ToTerm("}");
             var tokComa = ToTerm(",");
@@ -77,9 +75,16 @@ namespace GameCompiler.Analizadores
             var tokMas = ToTerm("+");
             var tokMenos = ToTerm("-");
             var tokPor = ToTerm("*");
-            var tokDiv = ToTerm("/");
             var tokApar = ToTerm("(");
             var tokCpar = ToTerm(")");
+            var tokAconf = ToTerm("<configuration>");
+            var tokCconf = ToTerm("</configuration>");
+            var tokAbackground = ToTerm("<background>");
+            var tokCbackground = ToTerm("</background>");
+            var tokAfigure = ToTerm("<figure>");
+            var tokCfigure = ToTerm("</figure>");
+            var tokAdesign = ToTerm("<design>");
+            var tokCdesign = ToTerm("</design>");
 
             
             #endregion
@@ -88,7 +93,6 @@ namespace GameCompiler.Analizadores
             var START = new NonTerminal("START");
             var BODIES = new NonTerminal("BODIES");
             var BODY = new NonTerminal("BODY");
-            //var CONFIG = new NonTerminal("CONFIG");
             var LABELBACKGROUND = new NonTerminal("LABELBACKGROUND");
             var BACKGROUNDS = new NonTerminal("BACKGROUNDS");
             var BACKGROUND = new NonTerminal("BACKGROUND");
@@ -108,12 +112,10 @@ namespace GameCompiler.Analizadores
             var LIFE = new NonTerminal("LIFE");
             var DESTRUCTION = new NonTerminal("DESTRUCTION");
             var HERO = new NonTerminal("HERO");
-            //var HEROS=new NonTerminal("HEROS");
             var HEROBODIES = new NonTerminal("HEROBODIES");
             var HEROBODY = new NonTerminal("HEROBODY");
             var HEROTYPE = new NonTerminal("HEROTYPE");
             var ENEMY = new NonTerminal("ENEMY");
-            //var ENEMIES = new NonTerminal("ENEMYS");
             var ENEMYBODIES = new NonTerminal("ENEMYBODIES");
             var ENEMYBODY = new NonTerminal("ENEMYBODY");
             var ENEMYTYPE = new NonTerminal("ENEMYTYPE");
@@ -129,7 +131,6 @@ namespace GameCompiler.Analizadores
             var BLOCKTYPE = new NonTerminal("BLOCKTYPE");
             var BONUS = new NonTerminal("BONUS");
             var BONUSTYPE = new NonTerminal("BONUSTYPE");
-            //var BOMB = new NonTerminal("BOMB");
             var POINTS = new NonTerminal("POINTS");
             var WEAPON = new NonTerminal("WEAPON");
             var WEAPONTYPE = new NonTerminal("WEAPONTYPE");
@@ -144,7 +145,7 @@ namespace GameCompiler.Analizadores
 
             #region GRAMATICA
 
-            START.Rule = tokMenor + tokConfig + tokMayor + BODIES + tokMenor + tokSlash + tokConfig + tokMayor
+            START.Rule = tokAconf + BODIES + tokCconf
                             ;
 
             BODIES.Rule = MakePlusRule(BODIES, BODY)
@@ -155,14 +156,14 @@ namespace GameCompiler.Analizadores
                             | LABELDESIGN
                             ;
             BODY.ErrorRule = SyntaxError + ">";
-            
-            LABELBACKGROUND.Rule = tokMenor + tokBackground + tokMayor + BACKGROUNDS + tokMenor + tokSlash + tokBackground + tokMayor
+
+            LABELBACKGROUND.Rule = tokAbackground + BACKGROUNDS + tokCbackground
                             ;
 
-            LABELFIGURE.Rule = tokMenor + tokFigure + tokMayor + FIGURES + tokMenor + tokSlash + tokFigure + tokMayor
+            LABELFIGURE.Rule = tokAfigure + FIGURES + tokCfigure
                             ;
 
-            LABELDESIGN.Rule = tokMenor + tokDesign + tokMayor + DESIGNS + tokMenor + tokSlash + tokDesign + tokMayor
+            LABELDESIGN.Rule = tokAdesign + DESIGNS + tokCdesign
                             ;
 
             BACKGROUNDS.Rule = MakePlusRule(BACKGROUNDS, tokComa, BACKGROUND)
@@ -181,23 +182,23 @@ namespace GameCompiler.Analizadores
 
             NAME.Rule = tokNombre + tokIgual + tokId + tokPcoma
                             ;
-            NAME.ErrorRule = SyntaxError + ";";
+            //NAME.ErrorRule = SyntaxError + ";";
 
             SOURCE.Rule = tokImagen + tokIgual + tokCadena + tokPcoma
                             ;
-            SOURCE.ErrorRule = SyntaxError + ";";
+            //SOURCE.ErrorRule = SyntaxError + ";";
 
             DESCRIPTION.Rule = tokDescripcion + tokIgual + tokCadena + tokPcoma
                             ;
-            DESCRIPTION.ErrorRule = SyntaxError + ";";
+            //DESCRIPTION.ErrorRule = SyntaxError + ";";
 
             LIFE.Rule = tokVida + tokIgual + EXP + tokPcoma
                             ;
-            LIFE.ErrorRule = SyntaxError + ";";
+            //LIFE.ErrorRule = SyntaxError + ";";
 
             DESTRUCTION.Rule = tokDestruir + tokIgual + EXP + tokPcoma
                            ;
-            DESTRUCTION.ErrorRule = SyntaxError + ";";
+            //DESTRUCTION.ErrorRule = SyntaxError + ";";
 
 
             FIGURES.Rule = MakePlusRule(FIGURES, tokComa, FIGURE)
@@ -229,7 +230,7 @@ namespace GameCompiler.Analizadores
             EXP.Rule = EXP + tokMas + EXP
                             | EXP + tokMenos + EXP
                             | EXP + tokPor + EXP
-                            | EXP + tokDiv + EXP
+                            | EXP + "/" + EXP
                             | tokNumero
                             | tokApar + EXP + tokCpar
                             | tokMenos + EXP
@@ -272,7 +273,7 @@ namespace GameCompiler.Analizadores
             RegisterOperators(3, "-()");
             RegisterOperators(4, tokApar + tokCpar);
 
-            this.MarkPunctuation(";","<",">","/","{","}","configuration", "figure", "background", "design","(",")");
+            this.MarkPunctuation(";", "{", "}", "(", ")", tokAconf.Text, tokAfigure.Text, tokAbackground.Text, tokAdesign.Text, tokCconf.Text, tokCfigure.Text, tokCbackground.Text, tokCdesign.Text);
             this.MarkTransient(BACKGROUND, BODYBACKGROUND, FIGUREBODY, DESIGNBODY, FTYPE, DTYPE, BODY, FIGURE, DESIGN, LABELBACKGROUND, LABELDESIGN, LABELFIGURE);
 
             this.Root = START;

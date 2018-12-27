@@ -65,11 +65,31 @@ namespace GameCompiler.Analizadores
             var tokCpar = ToTerm(")");
             var tokIgual = ToTerm("=");
             var tokPunto = ToTerm(".");
+            var tokAescenario = ToTerm("<x-escenarios");
+            var tokCescenario = ToTerm("</x-escenarios>");
+            var tokApersonajes = ToTerm("<x-personajes>");
+            var tokCpersonajes = ToTerm("</x-personajes>");
+            var tokAheroes = ToTerm("<x-heroes>");
+            var tokCheroes = ToTerm("</x-heroes>");
+            var tokAvillanos = ToTerm("<x-villanos>");
+            var tokCvillanos = ToTerm("</x-villanos>");
+            var tokAparedes = ToTerm("<x-paredes>");
+            var tokCparedes = ToTerm("</x-paredes>");
+            var tokAextras = ToTerm("<x-extras>");
+            var tokCextras = ToTerm("</x-extras>");
+            var tokAarmas = ToTerm("<x-armas>");
+            var tokCarmas = ToTerm("</x-armas>");
+            var tokAbonus = ToTerm("<x-bonus>");
+            var tokCbonus = ToTerm("</x-bonus>");
+            var tokAmeta = ToTerm("<meta>");
+            var tokCmeta = ToTerm("</meta>");
+
+
             #endregion
 
             #region NO TERMINALES
             var INICIO = new NonTerminal("INICIO");
-            var CUERPOS = new NonTerminal("CUEPOS");
+            var CUERPOS = new NonTerminal("CUERPOS");
             var CUERPO = new NonTerminal("CUERPO");
             var PERSONAJES=new NonTerminal("PERSONAJES");
             var CPERSONAJES=new NonTerminal("CPERSONAJES");
@@ -104,7 +124,7 @@ namespace GameCompiler.Analizadores
             #endregion
             
             #region Gramatica
-            INICIO.Rule = tokMenor + tokEscenarios + tokBackground + tokIgual + tokId + tokPcoma + tokAncho + tokIgual + EXP + tokPcoma + tokAlto + tokIgual + EXP  + tokMayor + CUERPOS + tokMenor + tokSlash + tokEscenarios + tokMayor
+            INICIO.Rule = tokAescenario + tokBackground + tokIgual + tokId + tokPcoma + tokAncho + tokIgual + EXP + tokPcoma + tokAlto + tokIgual + EXP + tokMayor + CUERPOS + tokCescenario
                               ;
 
             CUERPOS.Rule = MakePlusRule(CUERPOS, CUERPO)
@@ -117,7 +137,7 @@ namespace GameCompiler.Analizadores
                               ;
             CUERPO.ErrorRule = SyntaxError + ">";
 
-            PERSONAJES.Rule = tokMenor + tokPersonajes + tokMayor + CPERSONAJES + tokMenor + tokSlash + tokPersonajes + tokMayor
+            PERSONAJES.Rule = tokApersonajes + CPERSONAJES + tokCpersonajes
                               ;
 
             CPERSONAJES.Rule= MakePlusRule(CPERSONAJES,CPERSONAJE)
@@ -127,7 +147,7 @@ namespace GameCompiler.Analizadores
                               | VILLANOS
                               ;
 
-            HEROES.Rule=tokMenor+tokHeroes+tokMayor+CHEROES+tokMenor+tokSlash+tokHeroes+tokMayor
+            HEROES.Rule = tokAheroes + CHEROES + tokCheroes
                               ;
 
             CHEROES.Rule=MakePlusRule(CHEROES,CHEROE)
@@ -137,7 +157,7 @@ namespace GameCompiler.Analizadores
                               ;
             CHEROE.ErrorRule = SyntaxError + ";";
 
-            VILLANOS.Rule=tokMenor+tokVillanos+tokMayor+CVILLANOS+tokMenor+tokSlash+tokVillanos+tokMayor
+            VILLANOS.Rule = tokAvillanos + CVILLANOS + tokCvillanos
                               ;
 
             CVILLANOS.Rule= MakePlusRule(CVILLANOS, CVILLANO)
@@ -147,7 +167,7 @@ namespace GameCompiler.Analizadores
                               ;
             CVILLANO.ErrorRule = SyntaxError + ";";
 
-            PAREDES.Rule = tokMenor + tokParedes + tokMayor + CPAREDES + tokMenor + tokSlash + tokParedes + tokMayor
+            PAREDES.Rule = tokAparedes + CPAREDES + tokCparedes
                               ;
 
             CPAREDES.Rule = MakePlusRule(CPAREDES, CPARED)
@@ -164,7 +184,7 @@ namespace GameCompiler.Analizadores
                               | EXP + tokPunto + tokPunto + EXP
                               ;
 
-            EXTRAS.Rule = tokMenor + tokExtras + tokMayor + CEXTRAS + tokMenor + tokSlash + tokExtras + tokMayor
+            EXTRAS.Rule = tokAextras + CEXTRAS + tokCextras
                               ;
 
             CEXTRAS.Rule = MakePlusRule(CEXTRAS, CEXTRA)
@@ -174,7 +194,7 @@ namespace GameCompiler.Analizadores
                               | BONUS
                               ;
 
-            ARMAS.Rule = tokMenor + tokArmas + tokMayor + CARMAS + tokMenor + tokSlash + tokArmas + tokMayor
+            ARMAS.Rule = tokAarmas + CARMAS + tokCarmas
                               ;
 
             CARMAS.Rule = MakePlusRule(CARMAS, CARMA)
@@ -184,7 +204,7 @@ namespace GameCompiler.Analizadores
                               ;
             CARMA.ErrorRule = SyntaxError + ";";
 
-            BONUS.Rule = tokMenor + tokBonus + tokMayor + CBONUS + tokMenor + tokSlash + tokBonus + tokMayor
+            BONUS.Rule = tokAbonus + CBONUS + tokCbonus
                               ;
 
             CBONUS.Rule = MakePlusRule(CBONUS, CBONU)
@@ -194,7 +214,7 @@ namespace GameCompiler.Analizadores
                               ;
             CBONU.ErrorRule = SyntaxError + ";";
 
-            META.Rule = tokMenor + tokMeta + tokMayor + CMETAS + tokMenor + tokSlash + tokMeta + tokMayor
+            META.Rule = tokAmeta + CMETAS + tokCmeta
                               ;
 
             CMETAS.Rule = MakePlusRule(CMETAS, CMETA)
@@ -219,6 +239,9 @@ namespace GameCompiler.Analizadores
             RegisterOperators(3, "-()");
             RegisterOperators(4, tokApar + tokCpar);
 
+            this.MarkPunctuation(";", "{", "}", "(", ")",">", tokAescenario.Text, tokApersonajes.Text, tokAheroes.Text, tokAvillanos.Text, tokAparedes.Text, tokAextras.Text, tokAarmas.Text, tokAbonus.Text, tokAmeta.Text,
+                tokCescenario.Text, tokCpersonajes.Text, tokCheroes.Text, tokCvillanos.Text, tokCparedes.Text, tokCextras.Text, tokCarmas.Text, tokCbonus.Text, tokCmeta.Text);
+            this.MarkTransient(CUERPO, CPERSONAJE, PERSONAJES, VILLANOS, HEROES, PAREDES, EXTRAS, META, CEXTRA, ARMAS, BONUS);
             this.Root = INICIO;
             #endregion
 

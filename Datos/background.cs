@@ -10,11 +10,23 @@ namespace GameCompiler.Datos
     {
         public string nombre;
         public string ruta;
+        public double ancho;
+        public double alto;
+        public bool seleccionado;
 
         public Background(String nom,String ruta)
         {
             this.nombre = nom;
-            this.ruta = ruta;   
+            this.ruta = ruta;
+            this.seleccionado = false;
         }
+
+        public void agregarValores(double x, double y)
+        {
+            this.ancho = x;
+            this.alto = y;
+            seleccionado = true;
+        }
+
     }
 }

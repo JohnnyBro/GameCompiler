@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Panel));
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -38,9 +39,9 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Location = new System.Drawing.Point(145, 12);
+            this.panel1.Location = new System.Drawing.Point(917, 375);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(670, 418);
+            this.panel1.Size = new System.Drawing.Size(89, 98);
             this.panel1.TabIndex = 0;
             // 
             // pictureBox1
@@ -53,7 +54,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(-7, 26);
+            this.button1.Location = new System.Drawing.Point(931, 323);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -65,11 +66,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(837, 442);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.ClientSize = new System.Drawing.Size(799, 801);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.panel1);
+            this.MaximumSize = new System.Drawing.Size(815, 840);
+            this.MinimumSize = new System.Drawing.Size(815, 840);
             this.Name = "Panel";
             this.Text = "Panel";
+            this.Load += new System.EventHandler(this.Panel_Load);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

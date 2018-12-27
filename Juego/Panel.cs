@@ -15,8 +15,10 @@ namespace GameCompiler.Juego
         public Panel()
         {
             InitializeComponent();
+            //pintarTablero(20);
         }
-
+        PictureBox[,] tablero = new PictureBox[20, 20];
+        
         private void button1_Click(object sender, EventArgs e)
         {
             string ruta = "C:\\Users\\JohnnyBravo\\Desktop\\Proyecto1Reportes\\Images\\bomba.png";
@@ -38,19 +40,26 @@ namespace GameCompiler.Juego
             pictureBox1.Image = Resize(ruta, 10);
 
             
+            
         }
 
         public static Bitmap Resize(string img, int porCiento)
         {
             Bitmap image = (Bitmap)Bitmap.FromFile(img);
 
-            float nPercent = ((float)porCiento / 100);
+            //float nPercent = ((float)porCiento / 100);
+            float nPercent = porCiento;
 
-            int destinoWidth = (int)(image.Width * nPercent); int destinoHeight = (int)(image.Height * nPercent);
+            //int destinoWidth = (int)(image.Width * nPercent); int destinoHeight = (int)(image.Height * nPercent);
 
+            int destinoWidth = (int)porCiento; 
+            int destinoHeight = (int)porCiento;
             Bitmap Imagen2 = new Bitmap(destinoWidth, destinoHeight);
 
-            using (Graphics g = Graphics.FromImage((Image)Imagen2)) { g.DrawImage(image, 0, 0, destinoWidth, destinoHeight); }
+            using (Graphics g = Graphics.FromImage((Image)Imagen2)) 
+            { 
+                g.DrawImage(image, 0, 0, destinoWidth,destinoHeight); 
+            }
 
             image.Dispose(); 
             
@@ -68,5 +77,36 @@ namespace GameCompiler.Juego
             Location = new Point(100, 100),
             //Image = Image.FromFile("hello.jpg"),
         };
+
+        private void Panel_Load(object sender, EventArgs e)
+        {
+            //Pintar pintar = new Pintar();
+            // pintar.PintarTablero();
+            pintarTablero(20);
+        }
+        public void pintarTablero(int n)
+        {
+            int tamanio = 800 / n;
+            //int alto = 30;
+            //int ancho = 30;
+            string ruta = "C:\\Users\\JohnnyBravo\\Desktop\\Proyecto1Reportes\\Images\\bomba.png";
+            
+            for (int j = 0; j < n; j++)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    tablero[i, j] = new PictureBox();
+                    this.Controls.Add(tablero[i, j]);
+                    tablero[i, j].Width = tamanio;
+                    tablero[i, j].Height = tamanio;
+                    tablero[i, j].Top = tamanio*j;
+                    tablero[i, j].Left = tamanio*i;
+                    //tablero[i, j].BackColor = Color.Blue;
+                    //Bitmap image = (Bitmap)Bitmap.FromFile(ruta);
+
+                    tablero[i, j].Image = Resize(ruta,tamanio);
+                }
+            }
+        }
     }
 }
