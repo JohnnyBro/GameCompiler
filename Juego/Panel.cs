@@ -95,29 +95,40 @@ namespace GameCompiler.Juego
         public void pintarTablero(int n)
         {
             int tamanio = 750 / n;
-            string ruta = "C:\\Users\\JohnnyBravo\\Desktop\\Proyecto1Reportes\\Images\\pared.png";
+            string ruta = "";
             
-            for (int j = 0; j < 2; j++)
+            for (int j = 0; j < n; j++)
             {
                 for (int i = 0; i < n; i++)
                 {
-                    tablero[i, j] = new PictureBox();
-                    panelJuego.Controls.Add(tablero[i, j]);
-                    if(i==10 && j==10)
+                    if(Form1.matrizControl[i,j].tipo!=-1)
                     {
-                        panelJuego.Controls.Remove(tablero[i, j]);
+                        tablero[i, j] = new PictureBox();
+                        panelJuego.Controls.Add(tablero[i, j]);
+                        //if(i==10 && j==10)
+                        //{
+                        //    panelJuego.Controls.Remove(tablero[i, j]);
+                        //}
+                        //this.Controls.Add(tablero[i, j]);
+                        tablero[i, j].Width = tamanio;
+                        tablero[i, j].Height = tamanio;
+                        tablero[i, j].Top = tamanio * j;
+                        tablero[i, j].Left = tamanio * i;
+                        //tablero[i, j].BackColor = Color.Blue;
+                        //Bitmap image = (Bitmap)Bitmap.FromFile(ruta);
+                        ruta = Form1.matrizControl[i, j].rutaImgen;
+                        tablero[i, j].Image = Resize(ruta, tamanio);
+                        
+                        
                     }
-                    //this.Controls.Add(tablero[i, j]);
-                    tablero[i, j].Width = tamanio;
-                    tablero[i, j].Height = tamanio;
-                    tablero[i, j].Top = tamanio*j;
-                    tablero[i, j].Left = tamanio*i;
-                    //tablero[i, j].BackColor = Color.Blue;
-                    //Bitmap image = (Bitmap)Bitmap.FromFile(ruta);
-
-                    tablero[i, j].Image = Resize(ruta,tamanio);
+                    
                 }
             }
+        }
+
+        private void lblVida_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

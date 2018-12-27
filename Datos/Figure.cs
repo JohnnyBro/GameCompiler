@@ -14,8 +14,8 @@ namespace GameCompiler.Datos
         public double danio;
         public String tipo;
         public String descripcion;
-        public double x;
-        public double y;
+        public double x=-1;
+        public double y=-1;
 
         public Figure(String name, String source, Double life, double dan, String type, String description)
         {

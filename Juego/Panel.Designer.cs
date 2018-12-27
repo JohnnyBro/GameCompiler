@@ -99,7 +99,7 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = global::GameCompiler.Properties.Resources.corazon;
-            this.pictureBox3.Location = new System.Drawing.Point(234, 12);
+            this.pictureBox3.Location = new System.Drawing.Point(280, 12);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(52, 46);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -110,11 +110,12 @@
             // 
             this.lblVida.AutoSize = true;
             this.lblVida.Font = new System.Drawing.Font("Magneto", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVida.Location = new System.Drawing.Point(292, 26);
+            this.lblVida.Location = new System.Drawing.Point(338, 26);
             this.lblVida.Name = "lblVida";
             this.lblVida.Size = new System.Drawing.Size(98, 32);
             this.lblVida.TabIndex = 6;
             this.lblVida.Text = "label1";
+            this.lblVida.Click += new System.EventHandler(this.lblVida_Click);
             // 
             // Panel
             // 

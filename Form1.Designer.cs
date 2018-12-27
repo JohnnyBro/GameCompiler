@@ -216,7 +216,6 @@
             this.txtConsola.CharWidth = 8;
             this.txtConsola.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtConsola.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.txtConsola.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.txtConsola.IsReplaceMode = false;
             this.txtConsola.Location = new System.Drawing.Point(355, 377);
             this.txtConsola.Name = "txtConsola";

@@ -8,8 +8,8 @@ namespace GameCompiler.Juego
 {
     public class Celda
     {
-        int tipo;
-        string rutaImgen;
+        public int tipo=-1;
+        public string rutaImgen="";
 
         public Celda()
         {

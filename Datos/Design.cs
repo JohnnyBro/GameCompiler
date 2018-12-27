@@ -14,8 +14,8 @@ namespace GameCompiler.Datos
         public double danio;
         public double puntos;
 
-        public double xini;
-        public double xfin;
+        public double xini=-1;
+        public double xfin=-1;
         public double yini;
         public double yfin;
 

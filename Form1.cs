@@ -13,7 +13,7 @@ using System.Diagnostics;
 using GameCompiler.Analizadores;
 using GameCompiler.Graficadores;
 using GameCompiler.Datos;
-using System.Windows.Forms;
+
 namespace GameCompiler
 {
     public partial class Form1 : Form
@@ -32,7 +32,7 @@ namespace GameCompiler
         public static LinkedList<Figure> lista_figure = new LinkedList<Figure>();
         public static LinkedList<Design> lista_design = new LinkedList<Design>();
         static ListaPestanas LP = new ListaPestanas();
-        Juego.Celda[,] matrizControl;
+        public static Juego.Celda[,] matrizControl;
         public Form1()
         {
             InitializeComponent();
@@ -263,21 +263,108 @@ namespace GameCompiler
             {
                 for (int i = 0; i < n; i++)
                 {
-                    //matrizControl[i, j] = new Juego.Celda();
-                    //if (i == 10 && j == 10)
-                    //{
-                    //    //panelJuego.Controls.Remove(tablero[i, j]);
-                    //}
-                    ////this.Controls.Add(tablero[i, j]);
-                    //tablero[i, j].Width = tamanio;
-                    //tablero[i, j].Height = tamanio;
-                    //tablero[i, j].Top = tamanio * j;
-                    //tablero[i, j].Left = tamanio * i;
-                    ////tablero[i, j].BackColor = Color.Blue;
-                    ////Bitmap image = (Bitmap)Bitmap.FromFile(ruta);
-
-                    //tablero[i, j].Image = Resize(ruta, tamanio);
+                    matrizControl[i, j] = new Juego.Celda();
                 }
+            }
+            llenarMatrizControl();
+        }
+        
+        private void llenarMatrizControl()
+        {
+            
+            //leyendo la lista Design
+            foreach(var item in lista_design)
+            {
+                int tipo = -1;
+                string ruta = item.ruta;
+                ruta = ruta.Replace("\"", "");
+
+                switch(item.tipo)
+                {
+                    case "x-bloque":
+                        tipo = 1;
+                        break;
+                    case "x-bomba":
+                        tipo = 2;
+                        break;
+                    case "x-arma":
+                        tipo = 3;
+                        break;
+                    case "x-bonus":
+                        tipo = 4;
+                        break;
+                    case "x-meta":
+                        tipo = 5;
+                        break;
+                    default:
+                        MessageBox.Show("No coinciden los tipo");
+                        break;
+                }
+                
+                if(item.xini!=-1 && item.yini!=-1)
+                {
+                    if (item.xfin == 0 && item.yfin == 0)
+                    {
+                        matrizControl[(int)item.xini, (int)item.yini].rutaImgen = ruta;
+                        matrizControl[(int)item.xini, (int)item.yini].tipo = tipo;
+                    }
+                    else if (item.xfin > 0 && item.yfin == 0)
+                    {
+                        for (int i = (int)item.xini; i <= (int)item.xfin; i++)
+                        {
+                            matrizControl[i, (int)item.yini].tipo = tipo;
+                            matrizControl[i, (int)item.yini].rutaImgen = ruta;
+                        }
+                    }
+                    else if (item.xfin == 0 && item.yfin > 0)
+                    {
+                        for (int j = (int)item.yini; j <= (int)item.yfin; j++)
+                        {
+                            matrizControl[(int)item.xini, j].rutaImgen = ruta;
+                            matrizControl[(int)item.xini, j].tipo = tipo;
+                        }
+                    }
+                    else if (item.xfin > 0 && item.yfin > 0)
+                    {
+                        for (int j = (int)item.yini; j <= (int)item.yfin; j++)
+                        {
+                            for (int i = (int)item.xini; i <= (int)item.xfin; i++)
+                            {
+                                matrizControl[i, j].rutaImgen = ruta;
+                                matrizControl[i, j].tipo = tipo;
+                            }
+                        }
+                    }
+                }
+                
+                
+            }
+
+            //leyendo la lista Figure
+
+            foreach(var item in lista_figure)
+            {
+                int tipo = -1;
+                string ruta = item.ruta;
+                ruta = ruta.Replace("\"", "");
+                switch(item.tipo)
+                {
+                    case "x-enemigo":
+                        tipo = 6;
+                        break;
+
+                    case "x-heroe":
+                        tipo = 7;
+                        break;
+                }
+
+                if (item.x != -1 && item.y != -1)
+                {
+                    matrizControl[(int)item.x, (int)item.y].tipo = tipo;
+                    matrizControl[(int)item.x, (int)item.y].rutaImgen = ruta;
+                }
+
+                
             }
         }
 
