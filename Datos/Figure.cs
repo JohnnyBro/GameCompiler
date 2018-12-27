@@ -10,17 +10,19 @@ namespace GameCompiler.Datos
     {
         public String nombre;
         public String ruta;
-        public Double vida;
+        public double vida;
+        public double danio;
         public String tipo;
         public String descripcion;
         public double x;
         public double y;
 
-        public Figure(String name, String source, Double life, String type, String description)
+        public Figure(String name, String source, Double life, double dan, String type, String description)
         {
             this.nombre = name;
             this.ruta = source;
             this.vida = life;
+            this.danio = dan;
             this.tipo = type;
             this.descripcion = description;
         }

@@ -35,25 +35,26 @@
             this.itemNuevo = new System.Windows.Forms.ToolStripMenuItem();
             this.itemAbrir = new System.Windows.Forms.ToolStripMenuItem();
             this.itemGuardar = new System.Windows.Forms.ToolStripMenuItem();
-            this.itemGuardarComo = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemCerrarPestana = new System.Windows.Forms.ToolStripMenuItem();
             this.itemSalir = new System.Windows.Forms.ToolStripMenuItem();
             this.eJECUTARToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemEjecutarConf = new System.Windows.Forms.ToolStripMenuItem();
             this.itemEjecutarEsc = new System.Windows.Forms.ToolStripMenuItem();
-            this.tABLADESIMBOLOSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemTablaSimbolos = new System.Windows.Forms.ToolStripMenuItem();
             this.itemErrores = new System.Windows.Forms.ToolStripMenuItem();
             this.aYUDAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mANUALUSUARIOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mANUALTECNICOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aCERCADEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemManualUsuario = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemManualTecnico = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemAcercaDe = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPestanas = new System.Windows.Forms.TabControl();
             this.txtConsola = new FastColoredTextBoxNS.FastColoredTextBox();
             this.btnJugar = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAnterior = new System.Windows.Forms.Button();
             this.btnSiguiente = new System.Windows.Forms.Button();
             this.lblNombre = new System.Windows.Forms.Label();
             this.txtDescripcion = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnSeleccionar = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtConsola)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -77,7 +78,7 @@
             this.itemNuevo,
             this.itemAbrir,
             this.itemGuardar,
-            this.itemGuardarComo,
+            this.itemCerrarPestana,
             this.itemSalir});
             this.aRCHIVOToolStripMenuItem.Name = "aRCHIVOToolStripMenuItem";
             this.aRCHIVOToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
@@ -86,34 +87,35 @@
             // itemNuevo
             // 
             this.itemNuevo.Name = "itemNuevo";
-            this.itemNuevo.Size = new System.Drawing.Size(168, 22);
+            this.itemNuevo.Size = new System.Drawing.Size(170, 22);
             this.itemNuevo.Text = "NUEVO";
             this.itemNuevo.Click += new System.EventHandler(this.itemNuevo_Click);
             // 
             // itemAbrir
             // 
             this.itemAbrir.Name = "itemAbrir";
-            this.itemAbrir.Size = new System.Drawing.Size(168, 22);
+            this.itemAbrir.Size = new System.Drawing.Size(170, 22);
             this.itemAbrir.Text = "ABRIR";
             this.itemAbrir.Click += new System.EventHandler(this.itemAbrir_Click);
             // 
             // itemGuardar
             // 
             this.itemGuardar.Name = "itemGuardar";
-            this.itemGuardar.Size = new System.Drawing.Size(168, 22);
-            this.itemGuardar.Text = "GUARDAR";
+            this.itemGuardar.Size = new System.Drawing.Size(170, 22);
+            this.itemGuardar.Text = "GUARDAR COMO";
             this.itemGuardar.Click += new System.EventHandler(this.itemGuardar_Click);
             // 
-            // itemGuardarComo
+            // itemCerrarPestana
             // 
-            this.itemGuardarComo.Name = "itemGuardarComo";
-            this.itemGuardarComo.Size = new System.Drawing.Size(168, 22);
-            this.itemGuardarComo.Text = "GUARDAR COMO";
+            this.itemCerrarPestana.Name = "itemCerrarPestana";
+            this.itemCerrarPestana.Size = new System.Drawing.Size(170, 22);
+            this.itemCerrarPestana.Text = "CERRAR PESTANA";
+            this.itemCerrarPestana.Click += new System.EventHandler(this.itemCerrarPestana_Click);
             // 
             // itemSalir
             // 
             this.itemSalir.Name = "itemSalir";
-            this.itemSalir.Size = new System.Drawing.Size(168, 22);
+            this.itemSalir.Size = new System.Drawing.Size(170, 22);
             this.itemSalir.Text = "SALIR";
             this.itemSalir.Click += new System.EventHandler(this.itemSalir_Click);
             // 
@@ -122,7 +124,7 @@
             this.eJECUTARToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itemEjecutarConf,
             this.itemEjecutarEsc,
-            this.tABLADESIMBOLOSToolStripMenuItem,
+            this.itemTablaSimbolos,
             this.itemErrores});
             this.eJECUTARToolStripMenuItem.Name = "eJECUTARToolStripMenuItem";
             this.eJECUTARToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
@@ -142,11 +144,12 @@
             this.itemEjecutarEsc.Text = "ARCHIVO ESCENARIO";
             this.itemEjecutarEsc.Click += new System.EventHandler(this.itemEjecutarEsc_Click);
             // 
-            // tABLADESIMBOLOSToolStripMenuItem
+            // itemTablaSimbolos
             // 
-            this.tABLADESIMBOLOSToolStripMenuItem.Name = "tABLADESIMBOLOSToolStripMenuItem";
-            this.tABLADESIMBOLOSToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
-            this.tABLADESIMBOLOSToolStripMenuItem.Text = "TABLA DE SIMBOLOS";
+            this.itemTablaSimbolos.Name = "itemTablaSimbolos";
+            this.itemTablaSimbolos.Size = new System.Drawing.Size(223, 22);
+            this.itemTablaSimbolos.Text = "TABLA DE SIMBOLOS";
+            this.itemTablaSimbolos.Click += new System.EventHandler(this.itemTablaSimbolos_Click);
             // 
             // itemErrores
             // 
@@ -158,30 +161,33 @@
             // aYUDAToolStripMenuItem
             // 
             this.aYUDAToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mANUALUSUARIOToolStripMenuItem,
-            this.mANUALTECNICOToolStripMenuItem,
-            this.aCERCADEToolStripMenuItem});
+            this.itemManualUsuario,
+            this.itemManualTecnico,
+            this.itemAcercaDe});
             this.aYUDAToolStripMenuItem.Name = "aYUDAToolStripMenuItem";
             this.aYUDAToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.aYUDAToolStripMenuItem.Text = "AYUDA";
             // 
-            // mANUALUSUARIOToolStripMenuItem
+            // itemManualUsuario
             // 
-            this.mANUALUSUARIOToolStripMenuItem.Name = "mANUALUSUARIOToolStripMenuItem";
-            this.mANUALUSUARIOToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.mANUALUSUARIOToolStripMenuItem.Text = "MANUAL USUARIO";
+            this.itemManualUsuario.Name = "itemManualUsuario";
+            this.itemManualUsuario.Size = new System.Drawing.Size(177, 22);
+            this.itemManualUsuario.Text = "MANUAL USUARIO";
+            this.itemManualUsuario.Click += new System.EventHandler(this.itemManualUsuario_Click);
             // 
-            // mANUALTECNICOToolStripMenuItem
+            // itemManualTecnico
             // 
-            this.mANUALTECNICOToolStripMenuItem.Name = "mANUALTECNICOToolStripMenuItem";
-            this.mANUALTECNICOToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.mANUALTECNICOToolStripMenuItem.Text = "MANUAL TECNICO";
+            this.itemManualTecnico.Name = "itemManualTecnico";
+            this.itemManualTecnico.Size = new System.Drawing.Size(177, 22);
+            this.itemManualTecnico.Text = "MANUAL TECNICO";
+            this.itemManualTecnico.Click += new System.EventHandler(this.itemManualTecnico_Click);
             // 
-            // aCERCADEToolStripMenuItem
+            // itemAcercaDe
             // 
-            this.aCERCADEToolStripMenuItem.Name = "aCERCADEToolStripMenuItem";
-            this.aCERCADEToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.aCERCADEToolStripMenuItem.Text = "ACERCA DE ";
+            this.itemAcercaDe.Name = "itemAcercaDe";
+            this.itemAcercaDe.Size = new System.Drawing.Size(177, 22);
+            this.itemAcercaDe.Text = "ACERCA DE ";
+            this.itemAcercaDe.Click += new System.EventHandler(this.itemAcercaDe_Click);
             // 
             // tabPestanas
             // 
@@ -210,6 +216,7 @@
             this.txtConsola.CharWidth = 8;
             this.txtConsola.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtConsola.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.txtConsola.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.txtConsola.IsReplaceMode = false;
             this.txtConsola.Location = new System.Drawing.Point(355, 377);
             this.txtConsola.Name = "txtConsola";
@@ -229,15 +236,6 @@
             this.btnJugar.Text = "JUGAR";
             this.btnJugar.UseVisualStyleBackColor = true;
             this.btnJugar.Click += new System.EventHandler(this.btnJugar_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(36, 27);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(266, 254);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
             // 
             // btnAnterior
             // 
@@ -278,11 +276,31 @@
             this.txtDescripcion.Size = new System.Drawing.Size(266, 71);
             this.txtDescripcion.TabIndex = 8;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(36, 27);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(266, 254);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            // 
+            // btnSeleccionar
+            // 
+            this.btnSeleccionar.Location = new System.Drawing.Point(93, 454);
+            this.btnSeleccionar.Name = "btnSeleccionar";
+            this.btnSeleccionar.Size = new System.Drawing.Size(152, 53);
+            this.btnSeleccionar.TabIndex = 9;
+            this.btnSeleccionar.Text = "SELECCIONAR";
+            this.btnSeleccionar.UseVisualStyleBackColor = true;
+            this.btnSeleccionar.Click += new System.EventHandler(this.btnSeleccionar_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1094, 598);
+            this.Controls.Add(this.btnSeleccionar);
             this.Controls.Add(this.txtDescripcion);
             this.Controls.Add(this.lblNombre);
             this.Controls.Add(this.btnSiguiente);
@@ -312,17 +330,16 @@
         private System.Windows.Forms.ToolStripMenuItem itemNuevo;
         private System.Windows.Forms.ToolStripMenuItem itemAbrir;
         private System.Windows.Forms.ToolStripMenuItem itemGuardar;
-        private System.Windows.Forms.ToolStripMenuItem itemGuardarComo;
         private System.Windows.Forms.ToolStripMenuItem itemSalir;
         private System.Windows.Forms.ToolStripMenuItem eJECUTARToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aYUDAToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem itemEjecutarConf;
         private System.Windows.Forms.ToolStripMenuItem itemEjecutarEsc;
-        private System.Windows.Forms.ToolStripMenuItem tABLADESIMBOLOSToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemTablaSimbolos;
         private System.Windows.Forms.ToolStripMenuItem itemErrores;
-        private System.Windows.Forms.ToolStripMenuItem mANUALUSUARIOToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mANUALTECNICOToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aCERCADEToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemManualUsuario;
+        private System.Windows.Forms.ToolStripMenuItem itemManualTecnico;
+        private System.Windows.Forms.ToolStripMenuItem itemAcercaDe;
         private System.Windows.Forms.TabControl tabPestanas;
         private FastColoredTextBoxNS.FastColoredTextBox txtConsola;
         private System.Windows.Forms.Button btnJugar;
@@ -331,6 +348,8 @@
         private System.Windows.Forms.Button btnSiguiente;
         private System.Windows.Forms.Label lblNombre;
         private System.Windows.Forms.TextBox txtDescripcion;
+        private System.Windows.Forms.ToolStripMenuItem itemCerrarPestana;
+        private System.Windows.Forms.Button btnSeleccionar;
     }
 }
 

@@ -407,7 +407,7 @@ namespace GameCompiler.Analizadores
                 return;
             }
 
-            Figure figura = new Figure(nombre,ruta, vida, tipo, descripcion);
+            Figure figura = new Figure(nombre,ruta, vida, danio, tipo, descripcion);
             Form1.lista_figure.AddLast(figura);
 
         }

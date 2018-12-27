@@ -12,13 +12,16 @@ namespace GameCompiler.Juego
 {
     public partial class Panel : Form
     {
+        public double vida = 0;
+        public string nombre = "";
+        public static int n = 0;
+
         public Panel()
         {
             InitializeComponent();
             //pintarTablero(20);
         }
-        PictureBox[,] tablero = new PictureBox[20, 20];
-        
+        PictureBox[,] tablero;
         private void button1_Click(object sender, EventArgs e)
         {
             string ruta = "C:\\Users\\JohnnyBravo\\Desktop\\Proyecto1Reportes\\Images\\bomba.png";
@@ -82,21 +85,29 @@ namespace GameCompiler.Juego
         {
             //Pintar pintar = new Pintar();
             // pintar.PintarTablero();
-            pintarTablero(20);
+            lblPlayer.Text=nombre;
+            lblVida.Text=vida.ToString();
+            panelJuego.BackgroundImage = this.BackgroundImage;
+            tablero = new PictureBox[n, n];
+            pintarTablero(n);
+            
         }
         public void pintarTablero(int n)
         {
-            int tamanio = 800 / n;
-            //int alto = 30;
-            //int ancho = 30;
-            string ruta = "C:\\Users\\JohnnyBravo\\Desktop\\Proyecto1Reportes\\Images\\bomba.png";
+            int tamanio = 750 / n;
+            string ruta = "C:\\Users\\JohnnyBravo\\Desktop\\Proyecto1Reportes\\Images\\pared.png";
             
-            for (int j = 0; j < n; j++)
+            for (int j = 0; j < 2; j++)
             {
                 for (int i = 0; i < n; i++)
                 {
                     tablero[i, j] = new PictureBox();
-                    this.Controls.Add(tablero[i, j]);
+                    panelJuego.Controls.Add(tablero[i, j]);
+                    if(i==10 && j==10)
+                    {
+                        panelJuego.Controls.Remove(tablero[i, j]);
+                    }
+                    //this.Controls.Add(tablero[i, j]);
                     tablero[i, j].Width = tamanio;
                     tablero[i, j].Height = tamanio;
                     tablero[i, j].Top = tamanio*j;

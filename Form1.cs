@@ -13,11 +13,15 @@ using System.Diagnostics;
 using GameCompiler.Analizadores;
 using GameCompiler.Graficadores;
 using GameCompiler.Datos;
-
+using System.Windows.Forms;
 namespace GameCompiler
 {
     public partial class Form1 : Form
     {
+        public static string nombreJugador = "";
+        public static string imagenJugador = "";
+        public static double vidaJugador = 0;
+        bool seleccionarJugador = false;
         int nuevo = 0;
         String ruta = "";
         int tamLista;
@@ -28,6 +32,7 @@ namespace GameCompiler
         public static LinkedList<Figure> lista_figure = new LinkedList<Figure>();
         public static LinkedList<Design> lista_design = new LinkedList<Design>();
         static ListaPestanas LP = new ListaPestanas();
+        Juego.Celda[,] matrizControl;
         public Form1()
         {
             InitializeComponent();
@@ -39,7 +44,7 @@ namespace GameCompiler
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            lecturaInicial();
         }
 
         private void itemSalir_Click(object sender, EventArgs e)
@@ -217,10 +222,63 @@ namespace GameCompiler
 
         private void btnJugar_Click(object sender, EventArgs e)
         {
-            Juego.Panel juego = new Juego.Panel();
-            juego.Show();
+            string imagenPanel = "";
+            int tamano = 0;
+            if(seleccionarJugador==true)
+            {
+               
+                
+                foreach(var item in Form1.lista_background)
+                {
+                    if(item.seleccionado==true)
+                    {
+                        imagenPanel = item.ruta;
+                        imagenPanel = imagenPanel.Replace("\"", " ");
+                        tamano = (int)item.alto;
+                    }
+                }
+
+                //matrizControl = new Juego.Celda[tamano, tamano];
+                crearMatrizControl(tamano);
+                Juego.Panel juego = new Juego.Panel();
+                juego.BackgroundImage = Image.FromFile(imagenPanel);
+                Juego.Panel.n = tamano;
+                juego.nombre = nombreJugador;
+                juego.vida = vidaJugador;
+                juego.Show();
+            }else
+            {
+                MessageBox.Show("Seleccione un personaje..");
+            }
+            
             //juego.pintar pintar = new juego.pintar();
             //pintar.pintartablero();
+        }
+
+        private void crearMatrizControl(int n)
+        {
+            matrizControl = new Juego.Celda[n, n];
+
+            for (int j = 0; j < n; j++)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    //matrizControl[i, j] = new Juego.Celda();
+                    //if (i == 10 && j == 10)
+                    //{
+                    //    //panelJuego.Controls.Remove(tablero[i, j]);
+                    //}
+                    ////this.Controls.Add(tablero[i, j]);
+                    //tablero[i, j].Width = tamanio;
+                    //tablero[i, j].Height = tamanio;
+                    //tablero[i, j].Top = tamanio * j;
+                    //tablero[i, j].Left = tamanio * i;
+                    ////tablero[i, j].BackColor = Color.Blue;
+                    ////Bitmap image = (Bitmap)Bitmap.FromFile(ruta);
+
+                    //tablero[i, j].Image = Resize(ruta, tamanio);
+                }
+            }
         }
 
         private void itemEjecutarEsc_Click(object sender, EventArgs e)
@@ -292,12 +350,17 @@ namespace GameCompiler
                         ruta = ruta.Replace("\"", " ");
                         Bitmap img = (Bitmap)Bitmap.FromFile(ruta);
                         img.MakeTransparent();
-                        pictureBox1.Image = img; //Image.FromFile(ruta);
+                        pictureBox1.Image = img;
                         lblNombre.Text = lista_figure.ElementAt(contador).nombre;
                         string des = "";
                         des = lista_figure.ElementAt(contador).descripcion;
                         des = des.Replace("\"", " ");
                         txtDescripcion.Text = des;
+
+                        imagenJugador = ruta;
+                        nombreJugador = lista_figure.ElementAt(contador).nombre;
+                        vidaJugador = lista_figure.ElementAt(contador).vida;
+                        
                     }
                     break;
                 case "siguiente":
@@ -313,6 +376,10 @@ namespace GameCompiler
                         des = lista_figure.ElementAt(contador).descripcion;
                         des = des.Replace("\"", " ");
                         txtDescripcion.Text = des;
+
+                        imagenJugador = ruta;
+                        nombreJugador = lista_figure.ElementAt(contador).nombre;
+                        vidaJugador = lista_figure.ElementAt(contador).vida;
                     }
                     else
                     {
@@ -332,6 +399,10 @@ namespace GameCompiler
                         des = lista_figure.ElementAt(contador).descripcion;
                         des = des.Replace("\"", " ");
                         txtDescripcion.Text = des;
+
+                        imagenJugador = ruta;
+                        nombreJugador = lista_figure.ElementAt(contador).nombre;
+                        vidaJugador = lista_figure.ElementAt(contador).vida;
                     }
                     else
                     {
@@ -350,16 +421,170 @@ namespace GameCompiler
 
         private void btnSiguiente_Click(object sender, EventArgs e)
         {
+            seleccionarJugador = false;
             mostrarImagenes("siguiente");
         }
 
         private void btnAnterior_Click(object sender, EventArgs e)
         {
+            seleccionarJugador = false;
             mostrarImagenes("anterior");
         }
-            
+
+        private void itemCerrarPestana_Click(object sender, EventArgs e)
+        {
+            if (tabPestanas.SelectedTab != null)
+            {
+                if (MessageBox.Show("DESEA GUARDAR LOS CAMBIOS?", "GUARDAR", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    //savefiledialog guardar = new savefiledialog();
+                    //guardar.filter = "psc|*.psc";
+                    //guardar.title = "guardar archivos .psc";
+                    //guardar.showdialog();
+                    //messagebox.show(guardar.filename);
+                    //system.io.file.writealltext(guardar.filename, lp.leerentrada(tabpestanas.selectedtab.text));
+                    //tabpestanas.selectedtab.dispose();
 
 
+                    SaveFileDialog guardar = new SaveFileDialog();
+                    guardar.Filter = "Configuracion|*.xconf|Escenario|*.xesc";
+                    guardar.Title = "GAME COMPILER FILES";
+                    guardar.ShowDialog();
+                    ruta = guardar.FileName;
+                    try
+                    {
+                        System.IO.File.WriteAllText(ruta, LP.leerEntrada(tabPestanas.SelectedTab.Text));
+                        MessageBox.Show("El archivo se guardo correctamente.");
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
+
+                }
+                else
+                {
+                    String nombre = tabPestanas.SelectedTab.Text;
+                    //MessageBox.Show(nombre);
+                    tabPestanas.SelectedTab.Dispose();
+                }
+            }
+            else
+            {
+                MessageBox.Show("NO EXISTEN PESTANAS POR CERRAR");
+            }
+        }
+
+        private void itemTablaSimbolos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                String path = "C:\\Users\\JohnnyBravo\\Desktop\\Proyecto1Reportes\\TablaSimbolos\\TSimbolos.html";
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    Console.WriteLine("Elimino el archivo html***");
+                }
+
+            }
+            catch (Exception f)
+            {
+                Console.WriteLine("Exception: " + f.Message);
+            }
+            Reportes.TablaSimbolos tabla = new Reportes.TablaSimbolos();
+            tabla.ReporteTablaSimbolos();
+
+            try
+            {
+
+                Process.Start("C:\\Users\\JohnnyBravo\\Desktop\\Proyecto1Reportes\\TablaSimbolos\\TSimbolos.html");
+            }
+            catch (Exception g)
+            {
+                Console.WriteLine("Exception: " + g.Message);
+            }
+        }
+
+        public void lecturaInicial()
+        {
+            string ruta = "C:\\Users\\JohnnyBravo\\Desktop\\Proyecto1Reportes\\ArchivosEntrada\\Entrada1.xconf";
+            if (!string.IsNullOrEmpty(ruta))
+            {
+                
+                //MessageBox.Show(ruta);
+                string leer = File.ReadAllText(ruta);
+                bool resultado = Analizadores.Interprete.analizar1(leer);
+                if (resultado == true && LErrores.Count == 0)
+                {
+                    MessageBox.Show("ANALISIS  COMPLETADO");
+                    Analizadores.Interprete inter = new Interprete();
+                    inter.RecorrerListas();
+                    aux = lista_figure.First();
+                    tamLista = lista_figure.Count;
+                    mostrarImagenes("inicio");
+
+                }
+                else
+                {
+                    MessageBox.Show("EXISTEN ERRORES LEXICOS O SINTACTICOS");
+                    foreach (var item in LErrores)
+                    {
+                        txtConsola.Text = txtConsola.Text + "*" + item.tipo + "  " + item.mensaje + "  Linea: " + item.linea + "  Columna: " + item.columna + "\n";
+                    }
+                }
+
+
+
+   
+
+            }
+            else
+            {
+                MessageBox.Show("Error con la ruta del archivo inicial");
+            }
+        }
+
+        private void itemAcercaDe_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Desarrollado por: \n Johnny Mike Bravo Zamora\n Ingenieria Usac");
+        }
+
+        private void itemManualUsuario_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                Process.Start("D:\\DICIEMBRE 2018\\Compi1\\Proyecto1\\Manuales\\ManualUsuario.pdf");
+            }
+            catch (Exception g)
+            {
+                Console.WriteLine("Exception: " + g.Message);
+            }
+        }
+
+        private void itemManualTecnico_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                Process.Start("D:\\DICIEMBRE 2018\\Compi1\\Proyecto1\\Manuales\\ManualTecnico.pdf");
+            }
+            catch (Exception g)
+            {
+                Console.WriteLine("Exception: " + g.Message);
+            }
+        }
+
+        private void btnSeleccionar_Click(object sender, EventArgs e)
+        {
+            seleccionarJugador = true;
+            MessageBox.Show(lblNombre.Text + " seleccionado..");
+        }
+
+ 
+
+     
 
    
 
